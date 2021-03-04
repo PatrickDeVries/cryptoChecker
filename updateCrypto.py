@@ -2,6 +2,13 @@ from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import json
 import pandas
+from datetime import date, datetime
+
+
+today = datetime.now()
+date = today.strftime("%d/%m/%Y")
+time = today.strftime("%H:%M:%S")
+print(date, time)
 
 df = pandas.read_csv('crypto-log.csv')
 df = df.dropna(how='all')
@@ -51,11 +58,19 @@ try:
         newCoinValues[coin] = data['data'][coin]['quote']['USD']['price'] * cc[coin]
         coinChange[coin] = ((newCoinValues[coin] - oldCoinValue[coin]) / oldCoinValue[coin]) * 100
     
-    ndf = pandas.DataFrame(columns=['Coin', 'Old value', 'New value', 'Avg ppc', 'Curr ppc', 'Value change ($)', 'Value change (%)'])
+    ndf = pandas.DataFrame(columns=['Date (d/m/y)', 'Time', 'Coin', 'Quantity', 'Old value', 'New value', 'Avg ppc', 'Curr ppc', 'Value change ($)', 'Value change (%)'])
     
     for i, coin in enumerate(coinChange.keys()):
-        ndf.loc[i] = [coin, oldCoinValue[coin], newCoinValues[coin], ppc[coin],  data['data'][coin]['quote']['USD']['price'], newCoinValues[coin] - oldCoinValue[coin], coinChange[coin]]
+        ndf.loc[i] = [date, time, coin, cc[coin], oldCoinValue[coin], newCoinValues[coin], ppc[coin],  data['data'][coin]['quote']['USD']['price'], newCoinValues[coin] - oldCoinValue[coin], coinChange[coin]]
     print(ndf)
+    
+    toPrint = ''
+    try:
+        odf = pandas.read_csv('allData.csv')
+        toPrint = pandas.concat([odf, ndf])
+    except:
+        toPrint = ndf
+    toPrint.to_csv('allData.csv', columns=['Date (d/m/y)', 'Time', 'Coin', 'Quantity', 'Old value', 'New value', 'Avg ppc', 'Curr ppc'], index=False)
     
     totalChange = (sum(newCoinValues.values()) - sum(oldCoinValue.values()))/sum(oldCoinValue.values()) * 100
     if totalChange >=0:
