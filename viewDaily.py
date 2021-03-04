@@ -3,7 +3,7 @@ from datetime import datetime, date, timedelta
 from updateCrypto import updateCryptoData
 import regex as re
 
-# updateCryptoData()
+updateCryptoData()
 print('-------------- end update -----------------')
 
 data = pandas.read_csv('allData.csv')
