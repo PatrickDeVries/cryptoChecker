@@ -1,9 +1,13 @@
 import pandas
 from datetime import datetime, date, timedelta
 from updateCrypto import updateCryptoData
+from Utilities import sendNotif
 import regex as re
 
-updateCryptoData()
+updateOut = open('updatePrint.txt', 'w')
+
+updateCryptoData(printFile=updateOut)
+updateOut.close()
 print('-------------- end update -----------------')
 
 data = pandas.read_csv('allData.csv')
@@ -36,6 +40,11 @@ while ysameTimes.empty and numsIncluded > 1:
     
 print(sameTimes)
 print(ysameTimes)
+
+message = open('updatePrint.txt', 'r').read()
+print('message', message)
+
+sendNotif('Daily crypto stats', message, 'Crypto bot', 'pcdevri@gmail.com')
 
 
 
