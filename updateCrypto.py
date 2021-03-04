@@ -42,7 +42,7 @@ def updateCryptoData():
     }
     headers = {
     'Accepts': 'application/json',
-    'X-CMC_PRO_API_KEY': open('cmc_key.txt').read(),
+    'X-CMC_PRO_API_KEY': open('cmc_key.txt').read().strip(),
     }
 
     session = Session()
