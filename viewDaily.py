@@ -2,7 +2,6 @@ import pandas
 from datetime import datetime, date, timedelta
 from updateCrypto import updateCryptoData
 from Utilities import sendNotif
-import regex as re
 
 updateOut = open('updatePrint.txt', 'w')
 
