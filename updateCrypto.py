@@ -9,7 +9,10 @@ def updateCryptoData(printFile = sys.stdout):
     today = datetime.now()
     date = today.strftime("%d/%m/%Y")
     time = today.strftime("%H:%M:%S")
-    print(date, time, file=printFile)
+    oldOut = sys.stdout
+    sys.stdout = printFile 
+
+    print(date, time)
 
     df = pandas.read_csv('crypto-log.csv')
     df = df.dropna(how='all')
@@ -63,7 +66,7 @@ def updateCryptoData(printFile = sys.stdout):
         
         for i, coin in enumerate(coinChange.keys()):
             ndf.loc[i] = [date, time, coin, cc[coin], oldCoinValue[coin], newCoinValues[coin], ppc[coin],  data['data'][coin]['quote']['USD']['price'], newCoinValues[coin] - oldCoinValue[coin], coinChange[coin]]
-        print(ndf.to_string(), file=printFile)
+        print(ndf.to_string())
         
         toPrint = ''
         try:
@@ -75,15 +78,14 @@ def updateCryptoData(printFile = sys.stdout):
         
         totalChange = (sum(newCoinValues.values()) - sum(oldCoinValue.values()))/sum(oldCoinValue.values()) * 100
         if totalChange >=0:
-            print('\nTotal:\t$' + str(sum(newCoinValues.values()) - sum(oldCoinValue.values())) + '\t+' + str(totalChange) + ' %', file=printFile)
+            print('\nTotal:\t$' + str(sum(newCoinValues.values()) - sum(oldCoinValue.values())) + '\t+' + str(totalChange) + ' %')
         else:
-            print('\nTotal:\t$' + str(sum(newCoinValues.values()) - sum(oldCoinValue.values())) + '\t' + str(totalChange) + ' %', file=printFile)
+            print('\nTotal:\t$' + str(sum(newCoinValues.values()) - sum(oldCoinValue.values())) + '\t' + str(totalChange) + ' %')
         
-        print('Actual change: ' + str(sum(oldCoinValue.values())) + ' -> ' + str(sum(newCoinValues.values())), file=printFile)
+        print('Actual change: ' + str(sum(oldCoinValue.values())) + ' -> ' + str(sum(newCoinValues.values())))
         
-
         
     except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e, file=printFile)
-    
+        print(e)
+    sys.stdout = oldOut
 updateCryptoData()
