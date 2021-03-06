@@ -40,10 +40,11 @@ while ysameTimes.empty and numsIncluded > 1:
 print(sameTimes)
 print(ysameTimes)
 
-message = open('updatePrint.txt', 'r').read()
-print('message', message)
+# message = open('updatePrint.txt', 'r').read()
+# print('message', message)
+message = '\nYour stats are attached\n'
 
-sendNotif('Daily crypto stats', message, 'Crypto bot', 'pcdevri@gmail.com')
+sendNotif('Daily crypto stats', message, 'Crypto bot', 'pcdevri@gmail.com', ['updatePrint.txt'])
 
 
 

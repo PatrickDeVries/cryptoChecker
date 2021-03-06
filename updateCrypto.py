@@ -63,7 +63,7 @@ def updateCryptoData(printFile = sys.stdout):
         
         for i, coin in enumerate(coinChange.keys()):
             ndf.loc[i] = [date, time, coin, cc[coin], oldCoinValue[coin], newCoinValues[coin], ppc[coin],  data['data'][coin]['quote']['USD']['price'], newCoinValues[coin] - oldCoinValue[coin], coinChange[coin]]
-        print(ndf, file=printFile)
+        print(ndf.to_string(), file=printFile)
         
         toPrint = ''
         try:
